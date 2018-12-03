@@ -1,51 +1,60 @@
-class Shape(object):
-    '''形状'''
-     
-    def area(self):
-        pass
- 
-         
-class Rectangle(Shape):
-    '''矩形'''
-    def __init__(self, width=0, height=0):
-        super().__init__()
-        self.width = width
-        self.height = height
-         
-    @property
-    def area(self):
-        return self.width * self.height
-         
-         
-class Square(Rectangle):
-    '''正方形'''
-    def __init__(self, side=0):
-        super().__init__(side, side)
-         
-         
-         
-class Ellipse(Shape):
-    '''椭圆形'''
-    pi = 3.1415926535
-    def __init__(self, a=0, b=0):
-        super().__init__()
-        self.a = a
-        self.b = b
-         
-    @property
-    def area(self):
-        return self.a * self.b * self.pi
-         
-         
-class Circle(Ellipse):
-    '''圆形'''
-    def __init__(self, r=0):
-        super().__init__(r, r)
-         
-         
-shapes = [Ellipse(10,20), Square(15), Circle(5), Rectangle(20,15), Circle(5), Square(15), Ellipse(10,20)]
- 
-areas = [x.area for x in shapes]
-print('areas: ', areas)
-total_area = sum(areas)
-print('total_area: ', total_area)
+import tornado.ioloop
+import tornado.web
+
+class MainHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('''<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS九九乘法表</title>
+<meta name="keywords" content="JS,JavaScript,九九乘法表" />
+<meta name="decoration" content="《 JavaScript 面向对象编程指南 》课后作业，九九乘法表" />
+</head>
+<body>
+<h1>九九乘法表</h1>
+<script type="text/javascript">
+for(var i=1;i<=9;i++){
+    for(var j=1;j<=i;j++){
+        document.write(j+"*"+i+"="+i*j+"&nbsp;&nbsp;&nbsp;&nbsp;");
+    }
+    document.write('<br/>');
+}
+</script>
+</body>
+<ml>
+''')
+class MinHandler(tornado.web.RequestHandler):
+    def get(self):
+        self.write('''<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>JS九九乘法表</title>
+<meta name="keywords" content="JS,JavaScript,九九乘法表" />
+<meta name="decoration" content="《 JavaScript 面向对象编程指南 》课后作业，九九乘法表" />
+</head>
+<body>
+<h1>九九乘法表</h1>
+<script type="text/javascript">
+for(var i=1;i<=4;i++){
+    for(var j=1;j<=i;j++){
+        document.write(j+"*"+i+"="+i*j+"&nbsp;&nbsp;&nbsp;&nbsp;");
+    }
+    document.write('<br/>');
+}
+</script>
+</body>
+<ml>
+''')
+
+def make_app():
+    return tornado.web.Application([
+        (r"/", MainHandler),
+         (r"/4", MinHandler),
+    ])
+
+if __name__ == "__main__":
+    app = make_app()
+    app.listen(8888)
+    tornado.ioloop.IOLoop.current().start()
